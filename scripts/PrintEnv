@@ -1,0 +1,27 @@
+#!/usr/bin/env jlin
+
+  public void program(Hashtable h) throws Exception {
+    boolean windows=false;
+    //Printout java env
+    Properties prop = System.getProperties();
+    Enumeration e = prop.propertyNames();
+    String key = (String)e.nextElement();
+    while(e.hasMoreElements()) { 
+      tout(key+"="+prop.getProperty(key)+"\n");
+      key = (String)e.nextElement();
+    }
+    //Printout OS env if requested 
+    if("true".equals(h.get("OS"))) {
+    	if(System.getProperty("os.name").startsWith("Windows")) 
+	    windows=true;
+    	tout("\n");
+    	if(windows)
+      	    host("set");
+        else
+           host("env");
+    }
+    //Printout Jin env if requested 
+    if("true".equals(h.get("JIN"))) {
+	lout(h);
+    }
+  }

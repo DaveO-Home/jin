@@ -1,0 +1,224 @@
+#!/usr/bin/env jlin
+
+/* Derby's simple app */
+
+package my.jsc.scripts;
+
+import java.io.File;
+import java.sql.*;
+import org.apache.derby.*;
+import org.apache.derby.tools.sysinfo;
+
+
+    public final String driver = "org.apache.derby.jdbc.EmbeddedDriver";
+    public final String protocol = "jdbc:derby:";
+    public String dbName = "derbyDB";
+    private Connection conn;
+    private Properties props = new Properties();
+    private String doCreate = "false";
+
+    private ArrayList<Statement> statements = new ArrayList<Statement>();
+    private PreparedStatement psInsert;
+    private PreparedStatement psUpdate;
+    private Statement s;
+    private ResultSet rs = null;
+
+    public void program(Hashtable h) throws Exception {
+
+        //Verify Derby
+        String[] args = {};
+        org.apache.derby.tools.sysinfo.main(args);
+
+        Class.forName(driver).newInstance();
+        props.put("user", "jin");
+        props.put("password", "jinit");
+        conn = getDb(props);
+        conn.setAutoCommit(false);
+
+        s = conn.createStatement();
+        statements.add(s);
+
+        if (doCreate == "true") {
+            createLoadTable();
+        } else if ("true".equals(h.get("TABLE"))) {
+            createLoadTable();
+            lout("Table Location Loaded");
+        }
+
+        updateTable();
+        reportOnTable();
+
+        if ("true".equals(h.get("DROP"))) {
+            s.execute("drop table location");
+            conn.commit();
+            System.out.println("Dropped table location");
+        }
+
+        shutdown();
+
+    }
+
+    private int doit(String cmd) throws Exception {
+        return host(cmd);
+    }
+
+    private Connection getDb(Properties props) throws Exception {
+        Connection connection = null;
+
+        try {
+            connection = DriverManager.getConnection(protocol + dbName + ";create=" + doCreate, props);
+        } catch (SQLException se) {
+            if (((se.getErrorCode() == 40000) && ("XJ004".equals(se.getSQLState())))) {
+                doCreate = "true";
+                connection = DriverManager.getConnection(protocol + dbName + ";create=" + doCreate, props);
+            } else {
+                System.err.println("Derby Connection Problem");
+                printSQLException(se);
+            }
+        }
+        return connection;
+    }
+
+    private void createLoadTable() throws SQLException {
+        s.execute("create table location(num int, addr varchar(40))");
+        psInsert = conn.prepareStatement("insert into location values (?, ?)");
+        statements.add(psInsert);
+
+        psInsert.setInt(1, 1956);
+        psInsert.setString(2, "Webster St.");
+        psInsert.executeUpdate();
+        System.out.println("Inserted 1956 Webster");
+
+        psInsert.setInt(1, 1910);
+        psInsert.setString(2, "Union St.");
+        psInsert.executeUpdate();
+        System.out.println("Inserted 1910 Union");
+
+        conn.commit();
+    }
+
+    private void updateTable() throws SQLException {
+
+        psUpdate = conn.prepareStatement("update location set num=?, addr=? where num=?");
+        statements.add(psUpdate);
+
+        psUpdate.setInt(1, 180);
+        psUpdate.setString(2, "Grand Ave.");
+        psUpdate.setInt(3, 1956);
+        psUpdate.executeUpdate();
+        lout("Updated 1956 Webster to 180 Grand");
+
+        psUpdate.setInt(1, 300);
+        psUpdate.setString(2, "Lakeshore Ave.");
+        psUpdate.setInt(3, 180);
+        psUpdate.executeUpdate();
+        lout("Updated 180 Grand to 300 Lakeshore");
+
+        conn.commit();
+    }
+
+    private void reportOnTable() throws SQLException {
+        rs = s.executeQuery("SELECT num, addr FROM location ORDER BY num");
+
+        int number; // street number retrieved from the database
+        boolean failure = false;
+        if (!rs.next()) {
+            failure = true;
+            reportFailure("No rows in ResultSet");
+        }
+
+        if ((number = rs.getInt(1)) != 300) {
+            failure = true;
+            reportFailure("Wrong row returned, expected num=300, got " + number);
+        }
+
+        if (!rs.next()) {
+            failure = true;
+            reportFailure("Too few rows");
+        }
+
+        if ((number = rs.getInt(1)) != 1910) {
+            failure = true;
+            reportFailure("Wrong row returned, expected num=1910, got " + number);
+        }
+
+        if (rs.next()) {
+            failure = true;
+            reportFailure("Too many rows");
+        }
+
+        if (!failure) {
+            System.out.println("Verified the rows");
+        }
+    }
+
+    private void reportFailure(String message) {
+        System.err.println("\nData verification failed:");
+        System.err.println('\t' + message);
+    }
+
+    private void shutdown() {
+        try {
+            DriverManager.getConnection(protocol + ";shutdown=true");
+        } catch (SQLException se) {
+            if (((se.getErrorCode() == 50000) && ("XJ015".equals(se.getSQLState())))) {
+                lout("Derby shut down normally");
+                // Note that for single database shutdown, the expected
+                // SQL state is "08006", and the error code is 45000.
+            } else {
+                System.err.println("Derby did not shut down normally");
+                printSQLException(se);
+            }
+        } finally {
+            // release all open resources to avoid unnecessary memory usage
+
+            // ResultSet
+            try {
+                if (rs != null) {
+                    rs.close();
+                    rs = null;
+                }
+            } catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+
+            // Statements and PreparedStatements
+            int i = 0;
+            while (!statements.isEmpty()) {
+                // PreparedStatement extend Statement
+                Statement st = (Statement) statements.remove(i);
+                try {
+                    if (st != null) {
+                        st.close();
+                        st = null;
+                    }
+                } catch (SQLException sqle) {
+                    printSQLException(sqle);
+                }
+            }
+
+            //Connection
+            try {
+                if (conn != null) {
+                    conn.close();
+                    conn = null;
+                }
+            } catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+        }
+
+    }
+
+    public static void printSQLException(SQLException e) {
+
+        while (e != null) {
+            System.err.println("\n----- SQLException -----");
+            System.err.println("  SQL State:  " + e.getSQLState());
+            System.err.println("  Error Code: " + e.getErrorCode());
+            System.err.println("  Message:    " + e.getMessage());
+            // for stack traces, refer to derby.log or uncomment this:
+            //e.printStackTrace(System.err);
+            e = e.getNextException();
+        }
+    }

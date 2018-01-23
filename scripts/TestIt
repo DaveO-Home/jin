@@ -1,0 +1,83 @@
+#!/usr/bin/env jlin 
+
+package my.jsc.scripts;
+import java.io.File;
+import java.util.logging.*;
+
+private final static Logger logger = Logger.getLogger(TestIt.class.getName());
+
+   public void program(Hashtable h) throws Exception {
+
+	//passData is a Global Hashtable to pass data among scripts.
+	Date start = new Date();
+	passData.put("TestIt_Start", start.getTime());
+
+//!echo on
+	lout("");
+        logger.info("******* Output from TestIt *******");
+	lout("Location: "+TestIt.class.getProtectionDomain().getCodeSource().getLocation());
+	lout("");	
+
+	//Ask for specific input
+        tout("Please Enter Your Name: ");
+        String in = tin();
+        //Display requested data and the Jin working environment
+        lout("In=" + in + "  " + h);
+
+        //Force input from the terminal $0
+	//Dynamically compile, load and run.
+        !Next (String)h.get("$O") in "LR=false"
+
+        //Execute a precompiled version
+        //!my.jsc.scripts.Next (String)h.get("$0") "LR=true"
+
+	//Execute via properties file with numeric key.
+        //!5 (String)h.get("$1") "LR=true"
+        
+	//Execute next2 script again using a string key 
+	//with "ps" os command and entered name
+	passData.put("call_type", "Load and run from String key in jin.properties");
+	!nextTest "ps" in 
+
+        lout("\n******* Output from TestIt with 'echo on' *******\n");
+	
+	//List files in current directory using Java
+!echo on
+	File f = new File(whichFiles);
+	String files[] = f.list();
+        Arrays.sort(files);
+	int i = 0;
+	for(;i<files.length;i++) {
+	   System.out.println(files[i]);
+        }
+!echo off
+	lout("");
+	//Run multiple OS commands
+	doit("uname -a & ps");
+
+	passData.put("TestIt_End", new Date().getTime());
+	displayTiming();
+   }
+   private String whichFiles = ".";
+   private void doit(String cmd) throws Exception { host(cmd); }
+   
+   private void displayTiming() {
+	long testitStart = (long)passData.get("TestIt_Start");
+	long testitEnd = (long)passData.get("TestIt_End");
+	long nextStart = (long)passData.get("Next_Start");
+	long nextEnd = (long)passData.get("Next_End");
+
+	int tSeconds = (int) ((testitEnd - testitStart) / 1000) % 60 ;
+	int tMinutes = (int) (((testitEnd - testitStart) / (1000*60)) % 60);
+	int nSeconds = (int) ((nextEnd - nextStart) / 1000) % 60 ;
+	int nMinutes = (int) (((nextEnd - nextStart) / (1000*60)) % 60);
+	int nMilli = (int) (nSeconds == 0? nextEnd - nextStart: (nextEnd - nextStart) % (nSeconds * 1000));
+	
+	tout("\nElasped time for Testit: ");	
+	lout(String.format("%02d min, %02d sec", tMinutes, tSeconds));
+	tout("Elasped time for Next: ");	
+	lout(String.format("%02d min, %02d sec, %02d millisec", nMinutes, nSeconds, nMilli));
+	lout("");
+   }
+
+

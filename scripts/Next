@@ -1,0 +1,62 @@
+//This is a subscript, so there is no need for #!sh env 
+//You can execute it standalone by doing; ../bin/jlinux Next
+
+package my.jsc.scripts;
+
+import java.io.File;
+
+   public void program(Hashtable h) throws Exception {
+
+	passData.put("Next_Start", new Date().getTime());
+
+//Echo is experamental
+//!echo on 
+	/***********************************************************
+	*  Calling the subscript next2 three different ways 
+	***********************************************************/
+	//Dynamically compile and run
+	passData.put("call_type", "Dynamic - compile, load and run");
+        !next2 "help" (String)h.get("$2") "LR=false" 
+
+	//load and execute(next2) the class designated by the key 3 in "jin.properties".
+	passData.put("call_type", "Load and Run from jin.properties key");
+        !3 "help"  
+
+	//load and exacute without compiling from classes directory
+	passData.put("call_type", "Load and Run the Class");
+        !my.jsc.scripts.next2 "help" "LR=true" 
+
+        tout("\n******* Output from Next *******\n\n");
+	
+	//Display the jin environment
+        tout(h+"\n");
+
+	//Run the command entered as the first parameter from TestIt
+	//Note; if a parameter is not supplied, jin will stop and ask for input.
+        runit((String)h.get("$1"));
+
+//!echo off
+	passData.put("Next_End", new Date().getTime());	
+   }
+   private int doit(String cmd) throws Exception { return host(cmd); }
+
+   //Gaining control over the output from the host() method.  
+   private void runit(String cmd) throws Exception {
+        silent = true;
+        try {
+           int rc = doit(cmd);
+           String od = null;
+           while((od = prn.readLine()) != null)
+           {
+                tout(od+"\n");
+           }
+
+           String ed = "";
+           while((ed = err.readLine()) != null)
+           {
+                tout(ed+"\n");
+           }
+           rc = endProcess();
+           tout("RC="+rc+"\n");
+        } catch (Exception e) { e.printStackTrace(); }
+   }

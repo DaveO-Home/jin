@@ -1,0 +1,62 @@
+#!/usr/bin/sh
+
+if [ -z $1 ]; then exit; fi
+if [ "$JAVA_HOME" = "" ]; then 
+  echo Please set your JAVA_HOME
+  exit 1;
+fi
+
+if [[ $1 == *J9Mod* ]] && [ -z "$WD" ]; then
+  echo "Please set WD(working directory) envirnoment variable to at least ./"
+  echo "After exporting WD, see help about the Working Directory"
+  exit 1;
+fi
+DPARMS="";
+bypassMods=false
+for arg ; do
+    case $(echo $arg|cut -d= -f1|tr /a-z/ /A-Z/) in
+      DP) DPARMS="$DPARMS -D$arg"
+          ;;
+      BM) bypassMods=$(echo $arg|cut -d= -f2|tr /A-Z/ /a-z/)
+          ;;
+      *)  ;;
+    esac
+done
+
+if [ "$JIN_HOME" = "" ]; then 
+  export JIN_HOME="$(dirname "$(dirname "$(readlink -fm $0)")")"
+fi
+
+if [ "$JIN_APP" = "" ]; then 
+  export JIN_APP="$(dirname "$(dirname "$(readlink -fm $0)")")"
+fi
+
+export CD=$JIN_APP/classes
+
+LIB=$JIN_HOME/lib
+jarFile=$LIB/jin/jin.jar
+use9=false;
+
+if [[ ${JAVA_HOME} == *jdk-9* ]] && [ $1 != J9Mod ]; then
+   use9=true;
+   jarFile=$LIB/jin/jin9.jar;
+fi
+
+if [ "$WD" = "" ]; then 
+  WD=$JIN_APP/scripts
+fi
+
+CD2=
+for f in $LIB/*.jar
+do
+    CD2=$CD2$f:
+done  
+
+#DPARMS=$DPARMS "-DDL=:"
+
+if [ $use9 == true ] && [ $bypassMods == false ]; then
+	$JAVA_HOME/bin/java $DPARMS -XX:MaxDirectMemorySize=1500m -cp "$jarFile:$CD:$JAVA_HOME/lib/tools.jar:$CD2" -p $jarFile -m jin.it/jin.shell.JinScript sr="$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9" cd=$CD wd=$WD co="-Xlint:none"
+else
+	$JAVA_HOME/bin/java $DPARMS -XX:MaxDirectMemorySize=1500m -cp "$jarFile:$CD:$JAVA_HOME/lib/tools.jar:$CD2" jin.shell.JinScript sr="$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9" cd=$CD wd=$WD co="-Xlint:none"
+fi
+

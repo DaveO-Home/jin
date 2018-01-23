@@ -1,0 +1,16 @@
+package my.jsc.scripts;
+
+import java.io.File;
+
+   public void program(Hashtable h) throws Exception {
+
+        tout("\n******* Output from next2 *******\n\n");
+	lout("*******************");
+	lout("Hello There - " + h.get("$2")+" - Call Type: "+passData.get("call_type"));
+	lout("*******************");
+	//Running supplied OS command from Next
+        doit((String)h.get("$1"));
+	//Displaying the jin environment
+        tout(h+"\n");
+   }
+   private int doit(String cmd) throws Exception { return host(cmd); }
