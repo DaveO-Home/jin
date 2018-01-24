@@ -1,6 +1,6 @@
 # Jin
 
-Jin is a Java package that compiles and executes Java code. The programs operate much like OS shell scripting. Except for a few custom commands and structures, Jin is Java and supports any Jdk from 1.3 to 9. A properly configured Jin environment will run on any OS supporting Java.
+Jin is a Java package that compiles and executes java code. The programs operate much like OS shell scripting. Except for a few custom commands and structures, Jin is Java and supports any Jdk from 1.3 to 9. A properly configured Jin environment will run on any OS supporting Java.
 
 ## Installation
 
@@ -70,6 +70,9 @@ jin-0.1.0
 >
 >Since the install and application use different environment variables, you can move the JIN_APP directory to a more appropriate location. Just make sure your PATH knows about the new location, i.e. append `<new location>/scripts` to the PATH. Also, scripts can have any file name extension except __.java__.
 
+* You can use custom or vendor jars by adding them to the __lib__ directory.
+* Inline classes can be added the the script.
+
 ## Jin custom commands and variables
 
 * `tout` - `System.out.print`
@@ -96,6 +99,13 @@ jin-0.1.0
 ```java
         if(test)
         { ....
+```
+
+* Interfaces can be added to the script class with the keyword __interface__ following the imports, e.g.,
+
+```java
+        import java.sql.*;
+        interface MyFirstInterface, MySecondInterface;
 ```
 
 ## Nesting scripts
@@ -150,7 +160,8 @@ module jin.it {
 1. add to src/modules-info.java
 1. cd to the Jin `bin` directory
 1. Linux; export WD=".", Windows; set WD="."
-1. execute J9Mod to compile src/modules-info.java and rebuild the jin9.jar file.  Don't forget to `unset WD` when finished.
+1. execute J9Mod to compile src/modules-info.java and rebuild the jin9.jar file. The jar build uses an extract of jin9.jar at classes/jar.
+1. Don't forget to `unset WD` when finished.
 
     __Important__; On windows the jar is generated as newjin9.jar in the `lib\jin\` directory. Remove the old jin9.jar and rename newjin9.jar to jin9.jar. Windows puts a lock on the jin9.jar file that is being used by J9Mod.
 
