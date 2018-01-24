@@ -84,8 +84,8 @@ jin-0.1.0
 * `!3` - will run the class associated with key=3(jin.properties), this is legacy and it's better to use a string key.
 * `!"NextTest" "param1" "param2"` - will run the named key associated to a class, see jin.properties file.
 * `Hashtable h` - Jin converts args[] to this Hashtable.
-* `(String)h.get("$1")` retrieves the first standalone(without an "=" or "~") parameter. Params that have '=' or '~' are saved as key, value.  Standalone parameters are stored as $n keyed values.  For example: TestIt dir cd=. -d  would produce Hashtable entries(key,value)as ("$1", "dir"); ("CD", "."); ("$2", "-d").
-* If a script attempts to retrieve a standalone value and it's not found in the Hashtable, Jin will ask for a value. If the script asks for "$0" `(String)h.get("$0")`, Jin will always ask for a value. To check the Hashtable for a numbered key without forcing a prompt if not found, use a variable equal to (char)0x24 in place of the "$".
+* `(String)h.get("$1")` retrieves the first single(without an "=" or "~") parameter. Params that have '=' or '\~' are saved as key, value.  Single parameters are stored as $n keyed values.  For example: TestIt dir cd=. -d  would produce Hashtable entries(key,value)as ("$1", "dir"); ("CD", "."); ("$2", "-d").
+* If a script attempts to retrieve a single value and it's not found in the Hashtable, Jin will ask for a value. If the script asks for "$0" `(String)h.get("$0")`, Jin will always ask for a value. To check the Hashtable for a numbered key without forcing a prompt if not found, use a variable equal to (char)0x24 in place of the "$".
 * To pass collections of data among scripts there is a global Hashtable `passData`.
 * `!echo` can echo executing code, however it does have issues and should be used carefully.
 >* This should work; (block code must start on the same line as the command)
