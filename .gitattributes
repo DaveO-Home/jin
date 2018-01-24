@@ -1,0 +1,5 @@
+scripts/* linguist-language=Java
+scripts/*.sh linguist-language=Shell
+bin/J9Mod linguist-language=Java
+bin/jlin linguist-language=Shell
+bin/jwin linguist-language=Shell

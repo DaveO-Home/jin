@@ -71,7 +71,7 @@ jin-0.1.0
 >Since the install and application use different environment variables, you can move the JIN_APP directory to a more appropriate location. Just make sure your PATH knows about the new location, i.e. append `<new location>/scripts` to the PATH. Also, scripts can have any file name extension except __.java__.
 
 * You can use custom or vendor jars by adding them to the __lib__ directory.
-* Inline classes can be added the the script.
+* Inline classes can be added to the script.
 
 ## Jin custom commands and variables
 
