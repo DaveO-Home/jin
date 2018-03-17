@@ -9,7 +9,7 @@ import java.io.File;
 
 	passData.put("Next_Start", new Date().getTime());
 
-//Echo is experamental
+//Echo is experimental
 //!echo on 
 	/***********************************************************
 	*  Calling the subscript next2 three different ways 

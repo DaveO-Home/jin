@@ -12,8 +12,9 @@
     }
     //Printout OS env if requested 
     if("true".equals(h.get("OS"))) {
-    	if(System.getProperty("os.name").startsWith("Windows")) 
-	    windows=true;
+    	if(System.getProperty("os.name").startsWith("Windows")) {
+	      windows=true;
+      }
     	tout("\n");
     	if(windows)
       	    host("set");
@@ -22,6 +23,6 @@
     }
     //Printout Jin env if requested 
     if("true".equals(h.get("JIN"))) {
-	lout(h);
+	    lout(h);
     }
   }
