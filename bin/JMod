@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if [ "$1" = "9" ]; then
+	export lvl=1.$1
+elif [ -z $1 ]; then
+	export lvl=1.9
+else
+	export lvl=$1
+fi 
+
+./J9Mod jar=jin$1.jar level=$lvl  

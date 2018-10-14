@@ -1,6 +1,6 @@
 # Jin
 
-Jin is a Java package that compiles and executes java code. The programs operate much like OS shell scripting. Except for a few custom commands and structures, Jin is Java and supports any Jdk from 1.3 to 9. A properly configured Jin environment will run on any OS supporting Java.
+Jin is a Java package that compiles and executes java code. The programs operate much like OS shell scripting. Except for a few custom commands and structures, Jin is Java and supports any Jdk from 1.3 to 9 and Java11. A properly configured Jin environment will run on any OS supporting Java.
 
 ## Installation
 
@@ -14,6 +14,7 @@ jin-0.1.0
 │   ├── jlin
 │   └── jwin.cmd
 ├── classes
+│   └── jar
 ├── lib
 │   ├── derby.jar
 │   ├── derbytools.jar
@@ -160,9 +161,10 @@ module jin.it {
 1. add to src/modules-info.java
 1. cd to the Jin `bin` directory
 1. Linux; export WD=".", Windows; set WD="."
-1. execute J9Mod to compile src/modules-info.java and rebuild the jin9.jar file. The jar build uses an extract of jin9.jar at classes/jar.
+1. For Java9, execute J9Mod to compile src/modules-info.java and rebuild the jin9.jar file. The jar build uses an extract of jin9.jar at classes/jar.
+1. For Java > 9, execute JMod, e.g., `JMod 11` will rebuild the modules for Java11. __Note;__ Java10 was not implemented.
 1. Don't forget to `unset WD` when finished.
 
     __Important__; On windows the jar is generated as newjin9.jar in the `lib\jin\` directory. Remove the old jin9.jar and rename newjin9.jar to jin9.jar. Windows puts a lock on the jin9.jar file that is being used by J9Mod.
 
-    __Note__; J9Mod runs on both Linux and Windows since it is written in __Jin__;
+    __Note__; `J9Mod` and `JMod` run on both Linux and Windows since they are written in __Jin__;

@@ -41,6 +41,10 @@ if [[ ${JAVA_HOME} == *jdk-9* ]] && [ $1 != J9Mod ]; then
    use9=true;
    jarFile=$LIB/jin/jin9.jar;
 fi
+if [[ ${JAVA_HOME} == *jdk-11* ]] && [ $1 != J9Mod ]; then
+   use9=true;
+   jarFile=$LIB/jin/jin11.jar;
+fi
 
 if [ "$WD" = "" ]; then 
   WD=$JIN_APP/scripts

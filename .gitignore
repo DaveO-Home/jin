@@ -1,0 +1,4 @@
+scripts/derbyDB/**/*
+classes/**/*.class
+classes/jar/**/*
+lib/derby*
