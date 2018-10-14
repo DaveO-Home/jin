@@ -6,7 +6,7 @@ package my.jsc.scripts;
 
 import java.io.File;
 import java.sql.*;
-import org.apache.derby.*;
+// import org.apache.derby.*;
 import org.apache.derby.tools.sysinfo;
 
 
