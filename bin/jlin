@@ -30,7 +30,6 @@ fi
 if [ "$JIN_APP" = "" ]; then 
   export JIN_APP="$(dirname "$(dirname "$(readlink -fm $0)")")"
 fi
-
 export CD=$JIN_APP/classes
 
 LIB=$JIN_HOME/lib
@@ -44,6 +43,10 @@ fi
 if [[ ${JAVA_HOME} == *jdk-11* ]] && [ $1 != J9Mod ]; then
    use9=true;
    jarFile=$LIB/jin/jin11.jar;
+fi
+if [[ ${JAVA_HOME} == *jdk-12* ]] && [ $1 != J9Mod ]; then
+   use9=true;
+   jarFile=$LIB/jin/jin12.jar;
 fi
 
 if [ "$WD" = "" ]; then 

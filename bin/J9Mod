@@ -1,4 +1,4 @@
-#!/usr/bin/env /home/daveo/installs/jin-0.1.0/bin/jlin 
+#!/usr/bin/env ./jlin 
 package j9.mod.info;
 /*
     Coded to run on both linux and windows - if JAVA_HOME is Java9, jin will execute as a module.
