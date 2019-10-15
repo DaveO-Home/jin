@@ -172,4 +172,4 @@ __For additional modules do;__
 
     __Important__; On windows the jar is generated as newjin9.jar in the `lib\jin\` directory. Remove the old jin9.jar and rename newjin9.jar to jin9.jar. Windows puts a lock on the jin9.jar file that is being used by J9Mod.
 
-    __Note__; `J9Mod` and `JMod` run on both Linux and Windows since they are written in __Jin__;
+    __Note__; `J9Mod` runs on both Linux and Windows since it is written in __Jin__;
