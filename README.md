@@ -1,6 +1,6 @@
 # Jin
 
-Jin is a Java package that compiles and executes java code. The programs operate much like OS shell scripting. Except for a few custom commands and structures, Jin is Java and supports any Jdk from 1.3 to 9 and Java11. A properly configured Jin environment will run on any OS supporting Java.
+Jin is a Java package that compiles and executes java code. The programs operate much like OS shell scripting. Except for a few custom commands and structures, Jin is Java and supports any Jdk from 1.3 to 9 and Java13. A properly configured Jin environment will run on any OS supporting Java.
 
 ## Installation
 
@@ -118,9 +118,11 @@ jin-0.1.0
 ## Special parameters and jin.properties
 
 > There are three special parameter types;
+
 1. Internal Jin parameters
 1. Keyed values located in jin.properties
 1. User command line parameters
+
 * Internal
     1. CD - Classpath to Jin generated classes
     1. CO - Java Command Line Option, e.g. -X
@@ -162,7 +164,7 @@ module jin.it {
 1. cd to the Jin `bin` directory
 1. Linux; export WD=".", Windows; set WD="."
 1. For Java9, execute J9Mod to compile src/modules-info.java and rebuild the jin9.jar file. The jar build uses an extract of jin9.jar at classes/jar.
-1. For Java > 9, execute JMod, e.g., `JMod 11` will rebuild the modules for Java11. __Note;__ Java10 was not implemented.
+1. For Java > 9, execute JMod, e.g., `JMod 13` will rebuild the modules for Java13. __Note;__ Java10 was not implemented.
 1. Don't forget to `unset WD` when finished.
 
     __Important__; On windows the jar is generated as newjin9.jar in the `lib\jin\` directory. Remove the old jin9.jar and rename newjin9.jar to jin9.jar. Windows puts a lock on the jin9.jar file that is being used by J9Mod.
