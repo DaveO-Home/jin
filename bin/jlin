@@ -56,10 +56,10 @@ if [[ ${JAVA_HOME} == *jdk-13* ]] && [ $1 != J9Mod ]; then
    jarFile=$LIB/jin/jin13.jar;
 fi
 
-if [ "$WD" = "" ]; then 
+if [ -z $WD ]; then 
   WD=$JIN_APP/scripts
 fi
-
+echo "WD =" $WD
 CD2=
 for f in $LIB/*.jar
 do
