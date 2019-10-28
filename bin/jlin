@@ -28,9 +28,12 @@ if [ "$JIN_HOME" = "" ]; then
 fi
 
 if [ "$JIN_APP" = "" ]; then 
-  export JIN_APP="$(dirname "$(dirname "$(readlink -fm $0)")")"
+  export JIN_APP="$(dirname "$(dirname "$(readlink -fm $1)")")"
 fi
-export CD=$JIN_APP/classes
+
+if [ -z $CD ]; then
+    export CD=$JIN_APP/classes
+fi
 
 LIB=$JIN_HOME/lib
 jarFile=$LIB/jin/jin.jar

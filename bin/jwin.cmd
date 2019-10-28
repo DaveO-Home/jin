@@ -25,7 +25,9 @@ if "%JIN_HOME%" == "" (
 if "%JIN_APP%" == "" (
     set JIN_APP=%root%
 )
-set CD=%JIN_APP%\classes
+if "%CD%" == "" (
+    set CD=%JIN_APP%\classes
+)
 
 set LIB=%JIN_HOME%\lib
 
