@@ -1,17 +1,19 @@
 # Jin
 
-Jin is a Java package that compiles and executes java code. The programs operate much like OS shell scripting. Except for a few custom commands and structures, Jin is Java and supports any Jdk from 1.3 to 9 and Java13. A properly configured Jin environment will run on any OS supporting Java.
+Jin is a Java package that compiles and executes java code. The programs operate much like OS shell scripting. Except for a few custom commands and structures, Jin is Java and supports any Jdk from 1.3 to 9 and LTS versions 8, 11, 17 plus java13 and java18. A properly configured Jin environment will run on any OS supporting Java.
 
 ## Installation
 
  1\. After downloading the Github zip file, select an install directory and extract the contents.
 
 ```bash
-jin-0.1.0
+jin-0.2.0
 ├── bin
 │   ├── J9Mod
 │   ├── jin.properties
 │   ├── jlin
+│   ├── JMod
+│   ├── JMod.cmd
 │   └── jwin.cmd
 ├── classes
 │   └── jar
@@ -20,9 +22,17 @@ jin-0.1.0
 │   ├── derbytools.jar
 │   ├── fscontext.jar
 │   ├── jin
+│   │   ├── jin11.jar
+│   │   ├── jin12.jar
+│   │   ├── jin13.jar
+│   │   ├── jin17.jar
+│   │   ├── jin18.jar
+│   │   ├── jin8.jar
 │   │   ├── jin9.jar
 │   │   └── jin.jar
 │   └── providerutil.jar
+├── LICENSE
+├── README.md
 ├── scripts
 │   ├── DerbyDemo
 │   ├── jin.properties
@@ -88,7 +98,7 @@ Since the install and application use different environment variables, you can m
 * `!3` - will run the class associated with key=3(jin.properties), this is legacy and it's better to use a string key.
 * `!"NextTest" "param1" "param2"` - will run the named key associated to a class, see jin.properties file.
 * `Hashtable h` - Jin converts args[] to this Hashtable.
-* `(String)h.get("$1")` retrieves the first single(without an "=" or "~") parameter. Params that have '=' or '\~' are saved as key, value.  Single parameters are stored as \$n keyed values.  For example: TestIt dir cd=. -d  would produce Hashtable entries(key,value)as ("\$1", "dir"); ("CD", "."); ("\$2", "-d").
+* `(String)h.get((char)0x24+"1")` retrieves the first single(without an "=" or "~~") parameter. Params that have '=' or '\~' are saved as key, value.  Single parameters are stored as \$n keyed values.  For example: TestIt dir cd=. -d  would produce Hashtable entries(key,value)as ("\$1", "dir"); ("CD", "."); ("\$2", "-d").
 * If a script attempts to retrieve a single value and it's not found in the Hashtable, Jin will ask for a value. If the script asks for "\$0" `(String)h.get("$0")`, Jin will always ask for a value. To check the Hashtable for a numbered key without forcing a prompt if not found, use a variable equal to (char)0x24 in place of the "\$".
 * To pass collections of data among scripts there is a global Hashtable `passData`.
 * `!echo` can echo executing code, however it does have issues and should be used carefully.

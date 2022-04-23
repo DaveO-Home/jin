@@ -39,33 +39,31 @@ LIB=$JIN_HOME/lib
 jarFile=$LIB/jin/jin.jar
 use9=false;
 
-if [[ ${JAVA_HOME} == *jdk-9* ]] && [ $1 != J9Mod ]; then
+ver=`${JAVA_HOME}/bin/java -version 2>&1 | sed 1q`;
+ver=`awk -F'"|"' '{print $2}' <<< "$ver"`
+
+IFS='.'
+read -ra ver2 <<< "$ver"
+IFS=
+
+if (( ${ver2[0]} > 1 )) && [[ $1 != J9Mod ]]; then
    use9=true;
-   jarFile=$LIB/jin/jin9.jar;
-fi
-if [[ ${JAVA_HOME} == *jdk-11* ]] && [ $1 != J9Mod ]; then
-   use9=true;
-   jarFile=$LIB/jin/jin11.jar;
-fi
-if [[ ${JAVA_HOME} == *jdk-12* ]] && [ $1 != J9Mod ]; then
-   use9=true;
-   jarFile=$LIB/jin/jin12.jar;
-fi
-if [[ ${JAVA_HOME} == *jdk-13* ]] && [ $1 != J9Mod ]; then
-   use9=true;
-   jarFile=$LIB/jin/jin13.jar;
+   jarFile=$LIB/jin/jin${ver2[0]}.jar
+   elif (( ${ver2[1]} == 8)) && [[ $1 != J9Mod ]]; then
+      jarFile=$LIB/jin/jin${ver2[1]}.jar
 fi
 
 if [ -z $WD ]; then 
   WD=$JIN_APP/scripts
 fi
-echo "WD =" $WD
+
 CD2=
 for f in $LIB/*.jar
 do
     CD2=$CD2$f:
-done  
+done
 
+XPARMS="-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,address=5006,server=y,suspend=n"
 #DPARMS=$DPARMS "-DDL=:"
 
 if [ $use9 == true ] && [ $bypassMods == false ]; then
