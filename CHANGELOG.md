@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.2.1](https://github.com/DaveO-Home/jin/tree/v0.2.1) (2024-01-28)
+
+[Full Changelog](https://github.com/DaveO-Home/jin/compare/v0.2.0...v0.2.1)
+
+* Added support for java21
+
 ## [v0.2.0](https://github.com/DaveO-Home/jin/tree/v0.2.0) (2022-04-23)
 
 [Full Changelog](https://github.com/DaveO-Home/jin/compare/v0.1.0...v0.2.0)

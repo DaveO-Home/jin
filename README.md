@@ -1,6 +1,6 @@
 # Jin
 
-Jin is a Java package that compiles and executes java code. The programs operate much like OS shell scripting. Except for a few custom commands and structures, Jin is Java and supports any Jdk from 1.3 to 9 and LTS versions 8, 11, 17 plus java13 and java18. A properly configured Jin environment will run on any OS supporting Java.
+Jin is a Java package that compiles and executes java code. The programs operate much like OS shell scripting. Except for a few custom commands and structures, Jin is Java and supports any Jdk from 1.3 to 9 and LTS versions 8, 11, 17, 21 plus java13 and java18. A properly configured Jin environment will run on any OS supporting Java.
 
 ## Installation
 
@@ -27,6 +27,7 @@ jin-0.2.0
 │   │   ├── jin13.jar
 │   │   ├── jin17.jar
 │   │   ├── jin18.jar
+│   │   ├── jin21.jar
 │   │   ├── jin8.jar
 │   │   ├── jin9.jar
 │   │   └── jin.jar
