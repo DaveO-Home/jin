@@ -1,5 +1,6 @@
 package.json
 deploy
 scripts/derbyDB/**/*
-classes/**/*.class
+classes
+# classes/**/*.class
 lib/derby*
