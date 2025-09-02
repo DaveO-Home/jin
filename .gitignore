@@ -4,3 +4,4 @@ scripts/derbyDB/**/*
 classes
 # classes/**/*.class
 lib/derby*
+.idea

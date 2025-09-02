@@ -11,11 +11,16 @@ if [[ $1 == *J9Mod* ]] && [ -z "$WD" ]; then
   echo "After exporting WD, see help about the Working Directory"
   exit 1;
 fi
+
 DPARMS="";
+DPARMS2="";
+declare -l javaParam
 bypassMods=false
+
 for arg ; do
     case $(echo $arg|cut -d= -f1|tr /a-z/ /A-Z/) in
-      DP) DPARMS="$DPARMS -D$arg"
+      DP) javaParam=$(echo $arg|cut -d= -f2|tr /a-z/ /A-Z/)=$(echo $arg|cut -d= -f3|tr /a-z/ /A-Z/)
+	  DPARMS2=$DPARMS2$(echo -D$javaParam | xargs)" "
           ;;
       BM) bypassMods=$(echo $arg|cut -d= -f2|tr /A-Z/ /a-z/)
           ;;
@@ -29,6 +34,12 @@ fi
 
 if [ "$JIN_APP" = "" ]; then 
   export JIN_APP="$(dirname "$(dirname "$(readlink -fm $1)")")"
+fi
+
+if [ "$DPARMS" = "" ]; then
+  DPARMS=-Djava.util.logging.config.file=$JIN_APP/logging.properties
+else
+  DPARMS="-Djava.util.logging.config.file=$JIN_APP/logging.properties $DPARMS"
 fi
 
 if [ -z $CD ]; then
@@ -67,8 +78,8 @@ XPARMS="-Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,address=5006,server=y,su
 #DPARMS=$DPARMS "-DDL=:"
 
 if [ $use9 == true ] && [ $bypassMods == false ]; then
-	$JAVA_HOME/bin/java $DPARMS -XX:MaxDirectMemorySize=1500m -cp "$jarFile:$CD:$JAVA_HOME/lib/tools.jar:$CD2" -p $jarFile -m jin.it/jin.shell.JinScript sr="$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9" cd=$CD wd=$WD co="-Xlint:none"
+	$JAVA_HOME/bin/java $DPARMS $DPARMS2 -XX:MaxDirectMemorySize=1500m -cp "$jarFile:$CD:$JAVA_HOME/lib/tools.jar:$CD2" -p $jarFile -m jin.it/jin.shell.JinScript co="-Xlint:none" sr="$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9" cd=$CD wd=$WD
 else
-	$JAVA_HOME/bin/java $DPARMS -XX:MaxDirectMemorySize=1500m -cp "$jarFile:$CD:$JAVA_HOME/lib/tools.jar:$CD2" jin.shell.JinScript sr="$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9" cd=$CD wd=$WD co="-Xlint:none"
+	$JAVA_HOME/bin/java $DPARMS $DPARMS2 -XX:MaxDirectMemorySize=1500m -cp "$jarFile:$CD:$JAVA_HOME/lib/tools.jar:$CD2" jin.shell.JinScript co="-Xlint:none" sr="$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9" cd=$CD wd=$WD
 fi
 

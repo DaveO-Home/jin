@@ -28,6 +28,7 @@ jin-0.2.0
 │   │   ├── jin17.jar
 │   │   ├── jin18.jar
 │   │   ├── jin21.jar
+│   │   ├── jin24.jar
 │   │   ├── jin8.jar
 │   │   ├── jin9.jar
 │   │   └── jin.jar
